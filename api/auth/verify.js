@@ -1,4 +1,4 @@
-import { redis, normalizeEmail } from '../_lib/store.js';
+import { getDb, normalizeEmail } from '../_lib/store.js';
 import { checkOtp } from '../_lib/otp.js';
 import { signSession } from '../_lib/crypto.js';
 import { handler, fail } from '../_lib/http.js';
@@ -10,17 +10,23 @@ export default handler(async ({ email, purpose, otp }) => {
   if (!['signup', 'login'].includes(purpose) || !/^\d{6}$/.test(String(otp || '').trim()))
     throw fail(400, 'Enter the 6-digit code.');
 
-  await checkOtp(email, purpose, otp);
+  const db = await getDb();
+  await checkOtp(db, email, purpose, otp);
 
   let user;
   if (purpose === 'signup') {
-    const pending = await redis.get(`pending:${email}`);
+    const pending = await db.collection('pending').findOne({ _id: email });
     if (!pending) throw fail(400, 'Session expired. Please sign up again.');
-    user = { fullName: pending.fullName, email, passwordHash: pending.passwordHash, createdAt: Date.now() };
-    await redis.set(`user:${email}`, user);
-    await redis.del(`pending:${email}`);
+    user = { _id: email, fullName: pending.fullName, passwordHash: pending.passwordHash, createdAt: new Date() };
+    try {
+      await db.collection('users').insertOne(user);
+    } catch (e) {
+      if (e.code === 11000) throw fail(409, 'An account with this email already exists. Try signing in.');
+      throw e;
+    }
+    await db.collection('pending').deleteOne({ _id: email });
   } else {
-    user = await redis.get(`user:${email}`);
+    user = await db.collection('users').findOne({ _id: email });
     if (!user) throw fail(400, 'Account not found.');
   }
   const token = signSession({ email, fullName: user.fullName }, SESSION_TTL_MS);

@@ -1,9 +1,23 @@
-// Upstash Redis (free via Vercel Marketplace). Accepts either env naming scheme.
-import { Redis } from '@upstash/redis';
+// MongoDB Atlas connection, cached across serverless invocations.
+import { MongoClient } from 'mongodb';
 
-const url = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
-const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
-
-export const redis = new Redis({ url, token });
 export const normalizeEmail = (e) => String(e || '').trim().toLowerCase();
 export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+let dbPromise;
+export function getDb() {
+  if (!process.env.MONGODB_URI) throw new Error('MONGODB_URI env var is missing');
+  if (!dbPromise) {
+    dbPromise = new MongoClient(process.env.MONGODB_URI, { maxPoolSize: 5, serverSelectionTimeoutMS: 8000 })
+      .connect()
+      .then(async (client) => {
+        const db = client.db(process.env.MONGODB_DB || 'placementtwin');
+        // TTL indexes: Mongo auto-deletes expired docs (checked roughly every minute).
+        await Promise.all(['pending', 'otps', 'loginfails'].map((c) =>
+          db.collection(c).createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 })));
+        return db;
+      })
+      .catch((err) => { dbPromise = null; throw err; });
+  }
+  return dbPromise;
+}

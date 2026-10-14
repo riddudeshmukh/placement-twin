@@ -1,33 +1,47 @@
-import { redis } from './store.js';
 import { generateOtp, hashOtp, safeEqual } from './crypto.js';
 import { sendOtpEmail } from './mail.js';
 
-const OTP_TTL = 10 * 60;      // seconds
-const RESEND_COOLDOWN = 30;   // seconds
+const OTP_TTL_MS = 10 * 60 * 1000;
+const RESEND_COOLDOWN_MS = 30 * 1000;
 const MAX_TRIES = 5;
 
-export async function issueOtp(email, purpose) {
-  const cdKey = `otp-cd:${purpose}:${email}`;
-  if (await redis.get(cdKey)) {
-    const e = new Error('Please wait 30 seconds before requesting another code.'); e.status = 429; throw e;
+const err = (status, message) => Object.assign(new Error(message), { status });
+
+export async function issueOtp(db, email, purpose) {
+  const col = db.collection('otps');
+  const _id = `${purpose}:${email}`;
+  const existing = await col.findOne({ _id });
+  if (existing && existing.cooldownUntil > Date.now()) {
+    throw err(429, 'Please wait 30 seconds before requesting another code.');
   }
   const otp = generateOtp();
-  await redis.set(`otp:${purpose}:${email}`, { h: hashOtp(email, otp), tries: 0 }, { ex: OTP_TTL });
-  await redis.set(cdKey, 1, { ex: RESEND_COOLDOWN });
-  await sendOtpEmail(email, otp, purpose);
+  const now = Date.now();
+  await col.replaceOne(
+    { _id },
+    { _id, h: hashOtp(email, otp), tries: 0, expiresAt: new Date(now + OTP_TTL_MS), cooldownUntil: now + RESEND_COOLDOWN_MS },
+    { upsert: true },
+  );
+  try {
+    await sendOtpEmail(email, otp, purpose);
+  } catch (e) {
+    await col.deleteOne({ _id }); // let the user retry immediately
+    console.error('Email send failed:', e.message);
+    throw err(502, 'Could not send the email. Please try again in a moment.');
+  }
 }
 
-export async function checkOtp(email, purpose, otp) {
-  const key = `otp:${purpose}:${email}`;
-  const rec = await redis.get(key);
-  if (!rec) { const e = new Error('Code expired. Request a new one.'); e.status = 400; throw e; }
+export async function checkOtp(db, email, purpose, otp) {
+  const col = db.collection('otps');
+  const _id = `${purpose}:${email}`;
+  const rec = await col.findOne({ _id });
+  if (!rec || rec.expiresAt.getTime() < Date.now()) throw err(400, 'Code expired. Request a new one.');
   if (rec.tries >= MAX_TRIES) {
-    await redis.del(key);
-    const e = new Error('Too many wrong codes. Request a new one.'); e.status = 429; throw e;
+    await col.deleteOne({ _id });
+    throw err(429, 'Too many wrong codes. Request a new one.');
   }
   if (!safeEqual(rec.h, hashOtp(email, String(otp).trim()))) {
-    await redis.set(key, { ...rec, tries: rec.tries + 1 }, { keepTtl: true });
-    const e = new Error('Incorrect code.'); e.status = 400; throw e;
+    await col.updateOne({ _id }, { $inc: { tries: 1 } });
+    throw err(400, 'Incorrect code.');
   }
-  await redis.del(key); // single use
+  await col.deleteOne({ _id }); // single use
 }

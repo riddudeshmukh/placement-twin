@@ -1,0 +1,90 @@
+.az-root {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.az-empty-card {
+  max-width: 480px;
+  margin: 40px auto;
+  padding: 36px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.az-empty-card p { font-size: 0.86rem; color: var(--text-muted); }
+
+/* ===== Radial score band ===== */
+.az-score-band {
+  padding: 28px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.az-radial { position: relative; width: 120px; height: 120px; flex-shrink: 0; }
+.az-radial svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.az-radial-track { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 10; }
+.az-radial-fill {
+  fill: none; stroke: var(--accent-moss); stroke-width: 10; stroke-linecap: round;
+  transition: stroke-dashoffset 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+.az-radial-label {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.az-radial-label span { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; color: var(--text-title); }
+.az-radial-label small { font-size: 0.7rem; color: var(--text-muted); }
+
+.az-score-text { display: flex; flex-direction: column; gap: 8px; }
+.az-score-text h2 { font-size: 1.3rem; }
+.az-score-text p { font-size: 0.86rem; color: var(--text-muted); max-width: 520px; }
+
+/* ===== Horizontal metric rail ===== */
+.az-metric-rail {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.az-metric-card { padding: 18px; display: flex; flex-direction: column; gap: 6px; }
+.az-metric-value { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; }
+.az-metric-label { font-size: 0.78rem; color: var(--text-title); font-weight: 600; }
+.az-metric-track { height: 5px; border-radius: 3px; background: rgba(0,0,0,0.25); overflow: hidden; margin: 4px 0; }
+.az-metric-fill { height: 100%; }
+.az-metric-fill.text-brass { background: var(--accent-brass); }
+.az-metric-fill.text-moss { background: var(--accent-moss); }
+.az-metric-fill.text-clay { background: var(--accent-clay); }
+.az-metric-card p { font-size: 0.74rem; color: var(--text-muted); }
+
+/* ===== Keyword injection ===== */
+.az-keywords { padding: 22px; display: flex; flex-direction: column; gap: 10px; }
+.az-keywords-head { display: flex; justify-content: space-between; align-items: center; }
+.az-keywords-head span { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.94rem; }
+.az-keywords p { font-size: 0.82rem; color: var(--text-muted); }
+.az-keyword-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.az-keyword-chip {
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 12px; font-size: 0.8rem; cursor: pointer; border: none; color: var(--text-body);
+}
+.az-keyword-chip--done { color: var(--text-muted); cursor: default; }
+
+/* ===== Checklist band ===== */
+.az-checklist-band {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.az-checklist-col { padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+.az-checklist-col > span { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.92rem; }
+.az-checklist-col ul { display: flex; flex-direction: column; gap: 8px; list-style: none; }
+.az-checklist-col li { display: flex; gap: 8px; font-size: 0.84rem; color: var(--text-body); line-height: 1.45; }
+
+@media (max-width: 900px) {
+  .az-score-band { flex-direction: column; text-align: center; }
+  .az-metric-rail { grid-template-columns: repeat(2, 1fr); }
+  .az-checklist-band { grid-template-columns: 1fr; }
+}

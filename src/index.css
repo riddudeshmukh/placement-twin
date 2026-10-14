@@ -1,0 +1,12 @@
+/* Base reset — visual tokens and theming live in styles/theme.css */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}

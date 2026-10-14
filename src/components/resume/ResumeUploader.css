@@ -1,0 +1,131 @@
+.ru-root {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ===== Centered stage ===== */
+.ru-stage {
+  max-width: 620px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 34px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  text-align: center;
+}
+
+.ru-stage-head { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+.ru-stage-head h2 { font-size: 1.4rem; }
+.ru-stage-head p { font-size: 0.86rem; color: var(--text-muted); }
+
+.ru-mode-switch {
+  display: flex;
+  padding: 4px;
+  border-radius: var(--radius-pill);
+  gap: 4px;
+}
+
+.ru-mode-btn {
+  display: flex; align-items: center; gap: 6px;
+  background: transparent; border: none;
+  padding: 8px 16px; border-radius: var(--radius-pill);
+  font-size: 0.82rem; font-weight: 600; color: var(--text-muted); cursor: pointer;
+}
+.ru-mode-btn--active { color: var(--accent-brass); }
+
+.ru-dropzone {
+  width: 100%;
+  padding: 36px 20px;
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  border: 1.5px dashed var(--glass-border);
+  transition: border-color 0.2s;
+}
+.ru-dropzone--active { border-color: var(--accent-brass); }
+
+.ru-dropzone-icon {
+  width: 56px; height: 56px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.ru-dropzone h3 { font-size: 1.05rem; }
+.ru-dropzone p { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 6px; }
+
+.ru-paste-form { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+.ru-textarea {
+  width: 100%; padding: 14px; border: none; color: var(--text-body);
+  font-size: 0.86rem; resize: vertical; font-family: var(--font-sans);
+}
+.ru-textarea:focus { outline: 1px solid var(--accent-brass); }
+
+.ru-privacy-line {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.74rem; color: var(--text-faint);
+}
+
+.ru-progress { width: 100%; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+.ru-progress-labels { display: flex; justify-content: space-between; font-size: 0.8rem; }
+.ru-progress-track { height: 5px; border-radius: 3px; background: rgba(0,0,0,0.25); overflow: hidden; }
+.ru-progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent-violet), var(--accent-cyan)); transition: width 0.3s; }
+
+.ru-banner {
+  width: 100%; display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px; text-align: left;
+}
+.ru-banner strong { display: block; font-size: 0.88rem; color: var(--text-title); }
+.ru-banner p { font-size: 0.78rem; color: var(--text-muted); }
+.ru-banner-btn { margin-left: auto; flex-shrink: 0; }
+.ru-banner--warn { border-color: rgba(183, 136, 114, 0.35); }
+
+/* ===== Result strip ===== */
+.ru-result-strip {
+  display: grid;
+  grid-template-columns: 1.1fr 1.5fr auto;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.ru-result-identity {
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+.ru-avatar {
+  width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.ru-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.ru-result-identity h3 { font-size: 0.98rem; }
+.ru-result-identity span { display: block; font-size: 0.76rem; }
+.ru-result-email { color: var(--text-muted); }
+.ru-result-score { position: absolute; top: 12px; right: 12px; }
+
+.ru-result-skills { padding: 18px; }
+.ru-result-skills h4 { font-size: 0.84rem; margin-bottom: 10px; color: var(--text-title); }
+
+.ru-empty { display: flex; align-items: center; gap: 8px; padding: 10px 12px; font-size: 0.8rem; color: var(--text-muted); }
+
+.ru-skill-chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.ru-skill-chip {
+  font-size: 0.78rem; padding: 6px 10px;
+  display: flex; align-items: center; gap: 6px;
+}
+
+.ru-result-cta {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 0 22px; white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .ru-result-strip { grid-template-columns: 1fr; }
+}

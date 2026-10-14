@@ -1,0 +1,107 @@
+[
+  {
+    "id": "python-hello",
+    "language": "python",
+    "level": "Beginner",
+    "title": "Hello, world! \u2014 your first program",
+    "minutes": 8
+  },
+  {
+    "id": "javascript-hello",
+    "language": "javascript",
+    "level": "Beginner",
+    "title": "Hello, world! \u2014 your first program",
+    "minutes": 8
+  },
+  {
+    "id": "html-hello",
+    "language": "html",
+    "level": "Beginner",
+    "title": "Hello, web! \u2014 your first page",
+    "minutes": 8
+  },
+  {
+    "id": "css-first",
+    "language": "css",
+    "level": "Beginner",
+    "title": "Your first CSS rule",
+    "minutes": 8
+  },
+  {
+    "id": "java-hello",
+    "language": "java",
+    "level": "Beginner",
+    "title": "Hello, world! \u2014 your first program",
+    "minutes": 8
+  },
+  {
+    "id": "python-i-transform",
+    "language": "python",
+    "level": "Intermediate",
+    "title": "Filter, transform and total",
+    "minutes": 18
+  },
+  {
+    "id": "javascript-i-transform",
+    "language": "javascript",
+    "level": "Intermediate",
+    "title": "Filter, transform and total",
+    "minutes": 18
+  },
+  {
+    "id": "html-i-groups",
+    "language": "html",
+    "level": "Intermediate",
+    "title": "Group form controls meaningfully",
+    "minutes": 18
+  },
+  {
+    "id": "css-i-tokens",
+    "language": "css",
+    "level": "Intermediate",
+    "title": "Create reusable design values",
+    "minutes": 18
+  },
+  {
+    "id": "java-i-transform",
+    "language": "java",
+    "level": "Intermediate",
+    "title": "Filter, transform and total",
+    "minutes": 18
+  },
+  {
+    "id": "python-a-recursion",
+    "language": "python",
+    "level": "Advanced",
+    "title": "Reason about recursive calls",
+    "minutes": 25
+  },
+  {
+    "id": "javascript-a-recursion",
+    "language": "javascript",
+    "level": "Advanced",
+    "title": "Reason about recursive calls",
+    "minutes": 25
+  },
+  {
+    "id": "html-a-help",
+    "language": "html",
+    "level": "Advanced",
+    "title": "Associate help and error text",
+    "minutes": 25
+  },
+  {
+    "id": "css-a-grid-areas",
+    "language": "css",
+    "level": "Advanced",
+    "title": "Design layout with named grid areas",
+    "minutes": 25
+  },
+  {
+    "id": "java-a-recursion",
+    "language": "java",
+    "level": "Advanced",
+    "title": "Reason about recursive calls",
+    "minutes": 25
+  }
+]
